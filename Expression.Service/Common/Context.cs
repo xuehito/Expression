@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExpressionCal.Service
+namespace Expression.Service.Common
 {
     public class Context
     {
