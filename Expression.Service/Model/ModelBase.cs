@@ -14,7 +14,7 @@ namespace Expression.Service.Model
         /// <summary>
         ///     创建人
         /// </summary>
-        public Guid? CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         /// <summary>
         ///     创建时间
@@ -24,7 +24,7 @@ namespace Expression.Service.Model
         /// <summary>
         ///     修改人
         /// </summary>
-        public Guid? ModifyBy { get; set; }
+        public string ModifyBy { get; set; }
 
         /// <summary>
         ///     修改时间

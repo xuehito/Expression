@@ -19,6 +19,8 @@ namespace ExpressionCal.Service
         /// <returns></returns>
         public static MessageResult ExpreCal(Context context, string expressionStr, string returnVal)
         {
+            MessageResult result;
+
             if (string.IsNullOrEmpty(expressionStr))
             {
                 var msg = "表达式为空";
@@ -49,22 +51,23 @@ namespace ExpressionCal.Service
                 // 编译C#代码 
                 cr = cdp.CompileAssemblyFromSource(cp,
                     ExpressionExtender.ExpreExtender(context, expressionStr, returnVal));
+
+                if (cr.Errors.HasErrors)
+                {
+                    result = MessageResult.Fail;
+                }
+                else
+                {
+                    result = ExpreExec(cr.CompiledAssembly, context);
+                }
             }
             catch (Exception ex)
             {
-                //cp.GenerateExecutable = false; //不生成exe文件
-                //cp.GenerateInMemory = true; //生成dll
-                //cr = cdp.CompileAssemblyFromSource(cp,
-                //    ExpressionExtender.ExpreExtender(context, expressionStr, returnVal));
+                //log 
+                result = MessageResult.FailMsg(ex.Message);
             }
-            if (cr.Errors.HasErrors)
-            {
-            }
-            else
-            {
-                ExpreExec(cr.CompiledAssembly, context);
-            }
-            return null;
+           
+            return result;
         }
 
         /// <summary>
@@ -86,13 +89,8 @@ namespace ExpressionCal.Service
                     var mi = type.GetMethod("Compute");
                     var array = new object[]
                     {
-                        context.SN,
                         context.SystemId == null ? Guid.Empty.ToString() : context.SystemId.ToString(),
-                        context.WorkflowCode,
-                        context.ActivityCode,
                         context.ProcInstId,
-                        context.Folio,
-                        context.BizObjectId == null ? Guid.Empty.ToString() : context.BizObjectId.ToString()
                     };
 
                     var bussData = mi.Invoke(express, array);

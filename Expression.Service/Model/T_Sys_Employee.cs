@@ -1,12 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Expression.Service.Model
 {
-    public class UserModel
+    public class T_Sys_Employee
     {
         /// <summary>
         ///     员工唯一Id
         /// </summary>
+        [Key]
         public Guid EmployeeId { get; set; }
 
         /// <summary>
